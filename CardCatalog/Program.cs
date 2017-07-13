@@ -10,6 +10,13 @@ namespace CardCatalog
     {
         static void Main(string[] args)
         {
+            string userFile = GetFile();
+        }
+
+        private static string GetFile()
+        {
+            Console.Write("");
+            return Console.ReadLine();
         }
     }
 }
