@@ -11,7 +11,6 @@ namespace CardCatalog
     public class CardCatalog
     {
         private static List<Book> Books = new List<Book>();
-
         private static string filename = "";
 
         public static void Initialize()
