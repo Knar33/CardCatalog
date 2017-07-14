@@ -20,5 +20,10 @@ namespace CardCatalog
             Description = description;
             Author = author;
         }
+
+        public Book()
+        {
+
+        }
     }
 }

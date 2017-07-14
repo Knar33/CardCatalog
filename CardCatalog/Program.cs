@@ -37,7 +37,7 @@ namespace CardCatalog
                     CardCatalog.AddBook();
                     break;
                 case "3":
-                    CardCatalog.Save();
+                    CardCatalog.SaveXML();
                     status = true;
                     break;
                 default:
