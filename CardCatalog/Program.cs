@@ -16,7 +16,7 @@ namespace CardCatalog
             bool Status = false;
             do
             {
-                DisplayMenu(Status);
+                Status = DisplayMenu(Status);
             }
             while (Status == false);
         }
@@ -43,7 +43,6 @@ namespace CardCatalog
                     status = true;
                     break;
                 default:
-                    status = false;
                     break;
             }
             return status;
