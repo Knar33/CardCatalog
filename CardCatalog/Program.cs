@@ -15,9 +15,7 @@ namespace CardCatalog
 
             bool Status = false;
             do
-            {
                 Status = DisplayMenu(Status);
-            }
             while (Status == false);
         }
 
