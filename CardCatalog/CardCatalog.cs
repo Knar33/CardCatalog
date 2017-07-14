@@ -11,16 +11,29 @@ namespace CardCatalog
     {
         private static List<Book> Books = new List<Book>();
 
+        private static string filename;
         public static void Initialize()
         {
             Console.Write("Enter File Path: ");
-            string filename = Console.ReadLine();
+            string FileName = Console.ReadLine();
+            if (File.Exists(FileName))
+            {
+                filename = FileName;
+            }
+            else
+            {
+                Console.WriteLine("File doesn't exist. Creating new file books.csv");
+                using (StreamWriter createbook = new StreamWriter("books.csv", true))
+                {
+                }
+                filename = "books.csv";
+            }
+
             string line;
             StreamReader file = new StreamReader(filename);
             while ((line = file.ReadLine()) != null)
             {
                 String[] field = line.Split(',');
-                //Create a book for each line in the csv file, and add them to books array.
                 Books.Add(new Book(Convert.ToInt32(field[0]), field[1], field[2], field[3]));
             }
             file.Close();
@@ -46,16 +59,18 @@ namespace CardCatalog
             Console.WriteLine("Description");
             string description = Console.ReadLine();
             int bookid = (Books.Count + 1);
-            //get user input
             Books.Add(new Book(Convert.ToInt32(bookid), bookname, bookauthor, description));
             Console.WriteLine();
         }
 
         public static void Save()
         {
-            for (int i = 0; i < Books.Count; i++)
+            using (StreamWriter file = new StreamWriter(filename))
             {
-                //write values to csv
+                for (int i = 0; i < Books.Count; i++)
+                {
+                    file.WriteLine("{0},{1},{2},{3}", Books[i].Number, Books[i].Title, Books[i].Author, Books[i].Description);
+                }
             }
         }
 
