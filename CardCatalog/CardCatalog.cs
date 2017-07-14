@@ -24,8 +24,6 @@ namespace CardCatalog
             {
                 Console.WriteLine("File doesn't exist. Creating new file books.csv");
                 using (StreamWriter createbook = new StreamWriter("books.csv", true))
-                {
-                }
                 filename = "books.csv";
             }
 
