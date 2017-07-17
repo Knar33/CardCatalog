@@ -6,47 +6,46 @@ using System.Xml.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace CardCatalog
 {
     public class CardCatalog
     {
         private static List<Book> Books = new List<Book>();
-        private static string filename = "";
+        private static string fileName = "";
 
         public static void Initialize()
         {
             Console.Write("Enter File Path: ");
-            filename = Console.ReadLine();
-            if (!File.Exists(filename))
+            fileName = Console.ReadLine();
+            if (File.Exists(fileName))
             {
+                GetBooksXML();
+            }
+            else { 
                 if (File.Exists("books.xml"))
                 {
-                    filename = "books.xml";
+                    fileName = "books.xml";
+                    GetBooksXML();
+                    Console.WriteLine("Using default file: books.xml");
                 }
                 else
                 {
                     File.Create("books.xml").Close();
-                    filename = "books.xml";
-
-                    XmlSerializer reader = new XmlSerializer(typeof(List<Book>));
-                    using (FileStream stream = File.OpenWrite(filename))
-                    {
-                        reader.Serialize(stream, Books);
-                    }
-                    Console.WriteLine("File doesn't exist. Creating new file books.xml");                    
+                    fileName = "books.xml";
+                    Console.WriteLine("File doesn't exist. Creating new file: books.xml");
                 }
             }
-            GetBooksXML();
         }
 
         public static void GetBooksCSV()
         {
             string line;
-            StreamReader file = new StreamReader(filename);
+            StreamReader file = new StreamReader(fileName);
             while ((line = file.ReadLine()) != null)
             {
                 String[] field = line.Split(',');
-                Books.Add(new Book(Convert.ToInt32(field[0]), field[1], field[2], field[3]));
+                Books.Add(new Book(Convert.ToInt32(field[0]), field[1], field[2], field[3], field[4]));
             }
             file.Close();
         }
@@ -54,7 +53,7 @@ namespace CardCatalog
         public static void GetBooksXML()
         {
             XmlSerializer reader = new XmlSerializer(typeof(List<Book>));
-            using (FileStream stream = File.OpenRead(filename))
+            using (FileStream stream = File.OpenRead(fileName))
             {
                 Books = (List<Book>)reader.Deserialize(stream);
             }
@@ -62,11 +61,11 @@ namespace CardCatalog
 
         public static void SaveCSV()
         {
-            using (StreamWriter file = new StreamWriter(filename))
+            using (StreamWriter file = new StreamWriter(fileName))
             {
                 for (int i = 0; i < Books.Count; i++)
                 {
-                    file.WriteLine("{0},{1},{2},{3}", Books[i].Number, Books[i].Title, Books[i].Author, Books[i].Description);
+                    file.WriteLine("{0},{1},{2},{3}", Books[i].Number, Books[i].Title, Books[i].LastName, Books[i].FirstName, Books[i].Description);
                 }
             }
         }
@@ -74,7 +73,7 @@ namespace CardCatalog
         public static void SaveXML()
         {
             XmlSerializer reader = new XmlSerializer(typeof(List<Book>));
-            using (FileStream stream = File.OpenWrite(filename))
+            using (FileStream stream = File.OpenWrite(fileName))
             {
                 reader.Serialize(stream, Books);
             }
@@ -85,7 +84,7 @@ namespace CardCatalog
             Console.WriteLine();
             for (int i = 0; i < Books.Count; i++)
             {
-                Console.WriteLine("{0} {1} {2} {3}", Books[i].Number, Books[i].Title, Books[i].Author, Books[i].Description);
+                Console.WriteLine("{0} | {1} | {2} | {3} | {4}", Books[i].Number, Books[i].Title, Books[i].LastName, Books[i].FirstName, Books[i].Description);
             }
             Console.WriteLine();
         }
@@ -93,14 +92,16 @@ namespace CardCatalog
         public static void AddBook()
         {
             Console.WriteLine();
-            Console.WriteLine("Book Title: ");
+            Console.Write("Book Title: ");
             string bookname = Console.ReadLine();
-            Console.WriteLine("Author");
-            string bookauthor = Console.ReadLine();
-            Console.WriteLine("Description");
+            Console.Write("Author's Last Name: ");
+            string lastname = Console.ReadLine();
+            Console.Write("Author's First Name: ");
+            string firstname = Console.ReadLine();
+            Console.Write("Description: ");
             string description = Console.ReadLine();
             int bookid = (Books.Count + 1);
-            Books.Add(new Book(Convert.ToInt32(bookid), bookname, bookauthor, description));
+            Books.Add(new Book(Convert.ToInt32(bookid), bookname, lastname, firstname, description));
             Console.WriteLine();
         }
     }
